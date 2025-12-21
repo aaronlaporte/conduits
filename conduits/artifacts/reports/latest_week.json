@@ -1,0 +1,20 @@
+{
+  "date_start": "2024-08-01",
+  "date_end": "2024-08-03",
+  "summary": [
+    {
+      "bet_type": "p",
+      "total_bets": 1,
+      "net_profit": -50.0,
+      "staked": 50,
+      "roi": -1.0
+    },
+    {
+      "bet_type": "s",
+      "total_bets": 2,
+      "net_profit": 192.72727272727272,
+      "staked": 180,
+      "roi": 1.0707070707070707
+    }
+  ]
+}
