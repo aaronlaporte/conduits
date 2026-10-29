@@ -24,18 +24,18 @@ pip install -r requirements.txt
 
 ### Statcast ingestion
 
-The MLB stat ingestion flow mirrors the `mlb-betting-analytics` project: pulls Statcast data via `pybaseball`, applies domain transforms, and lands daily CSVs. To run locally:
+The MLB Statcast ingestion flow pulls data via `pybaseball`, applies domain transforms, and lands daily CSVs. To run locally:
 
 ```bash
 python -m conduits.examples.run_statcast
 ```
 
-### Weekly betting report
+### Weekly performance report
 
 Summarizes Excel-based tracking logs for client-ready reports:
 
 ```bash
-python -m conduits.examples.run_betting_report
+python -m conduits.examples.run_weekly_report
 ```
 
 This writes a `reports/latest_week.json` file that downstream tools (Tableau, PDF renderers) can consume.
