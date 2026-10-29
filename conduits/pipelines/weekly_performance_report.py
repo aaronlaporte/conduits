@@ -1,4 +1,4 @@
-"""Generalized betting report pipeline inspired by MLB repo."""
+"""Weekly performance report: summarize an Excel tracking log into weekly metrics."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -23,13 +23,13 @@ class WeeklyReportSink(DataSink):
         JSONSink(self.path).persist(payload)
 
 
-class WeeklyBettingReportPipeline(BasePipeline):
+class WeeklyPerformanceReportPipeline(BasePipeline):
     """Transforms an Excel log into summary metrics."""
 
     def __init__(self, workbook: str, sheet: str, out_path: str | Path) -> None:
         connector = ExcelTableConnector(workbook, sheet)
         sink = WeeklyReportSink(Path(out_path))
-        super().__init__("weekly_betting_report", connector, sink, transform=self._transform)
+        super().__init__("weekly_performance_report", connector, sink, transform=self._transform)
 
     @staticmethod
     def _transform(frame: pd.DataFrame) -> dict[str, Any]:
