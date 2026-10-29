@@ -33,28 +33,17 @@ class WeeklyPerformanceReportPipeline(BasePipeline):
 
     @staticmethod
     def _transform(frame: pd.DataFrame) -> dict[str, Any]:
-        frame = frame.dropna(subset=["date", "odds", "amount"]).copy()
+        frame = frame.dropna(subset=["date", "cost", "revenue"]).copy()
         frame["date"] = pd.to_datetime(frame["date"])
-        frame["profit"] = frame.apply(_calc_profit_row, axis=1)
-        summary = frame.groupby("bet_type").agg(
-            total_bets=("id", "count"),
+        frame["profit"] = frame["revenue"] - frame["cost"]
+        summary = frame.groupby("category").agg(
+            entries=("id", "count"),
             net_profit=("profit", "sum"),
-            staked=("amount", "sum"),
+            invested=("cost", "sum"),
         )
-        summary["roi"] = summary["net_profit"] / summary["staked"].replace({0: pd.NA})
+        summary["roi"] = summary["net_profit"] / summary["invested"].replace({0: pd.NA})
         return {
             "date_start": frame["date"].min().strftime("%Y-%m-%d"),
             "date_end": frame["date"].max().strftime("%Y-%m-%d"),
             "summary": summary.reset_index().to_dict(orient="records"),
         }
-
-
-def _calc_profit_row(row: pd.Series) -> float:
-    win = row.get("win")
-    odds = row["odds"]
-    amount = row["amount"]
-    if pd.isna(win):
-        return 0.0
-    if bool(win):
-        return amount * (odds / 100.0) if odds > 0 else amount * (100.0 / abs(odds))
-    return -amount
